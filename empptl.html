@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Grievance Portal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Employee Portal</h1>
+    <h2>Submit a Grievance</h2>
+    <input id="employee-id" type="text" placeholder="Enter Employee ID">
+    <textarea id="employee-grievance" placeholder="Describe your grievance here..."></textarea>
+    <button onclick="submitGrievance()">Submit Grievance</button>
+
+    <h2>Your Grievances</h2>
+    <div id="employee-grievance-list"></div>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
