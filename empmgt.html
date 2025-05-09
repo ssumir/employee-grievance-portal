@@ -121,11 +121,16 @@
   </div>
 
   <!-- Password Modal -->
-  <div id="password-modal">
+  <div id="password-modal" style="text-align: center; padding: 20px;">
     <h2>Enter Password to Access Management Portal</h2>
-    <input type="password" id="management-password" placeholder="Enter password...">
-    <button onclick="checkPassword()">Submit</button>
+      <input type="password" id="management-password" placeholder="Enter password..." 
+           style="width: 80%; padding: 10px; margin: 15px 0; border: 1px solid #ddd; border-radius: 4px;">
+      <button onclick="checkPassword()" 
+            style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        Submit
+      </button>
   </div>
+
 
   <!-- Toggle Button -->
   <button class="toggle-button" onclick="togglePasswordModal()">&#x25B2;</button>
