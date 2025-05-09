@@ -4,7 +4,58 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Employee Grievance Portal</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    h1, h2 {
+      margin-bottom: 16px;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 20px;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .grievance {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      background: #f9f9f9;
+    }
+    .status {
+      font-weight: bold;
+      color: #007bff;
+    }
+    .timestamp {
+      font-size: 0.9em;
+      color: #666;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -18,6 +69,59 @@
     <div id="employee-grievance-list"></div>
   </div>
 
-  <script src="scripts.js"></script>
+  <script>
+    const grievances = [];
+
+    function getCurrentTimestamp() {
+      const now = new Date();
+      return now.toLocaleString();
+    }
+
+    function generateTrackingNumber() {
+      return 'GR-' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+    }
+
+    function submitGrievance() {
+      const employeeId = document.getElementById('employee-id').value;
+      const description = document.getElementById('employee-grievance').value;
+
+      if (!employeeId.trim() || !description.trim()) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      const grievance = {
+        id: grievances.length + 1,
+        employeeId,
+        description,
+        trackingNumber: generateTrackingNumber(),
+        status: 'Received',
+        history: [{ status: 'Received', timestamp: getCurrentTimestamp() }],
+      };
+
+      grievances.push(grievance);
+      document.getElementById('employee-id').value = '';
+      document.getElementById('employee-grievance').value = '';
+      renderEmployeeGrievances();
+    }
+
+    function renderEmployeeGrievances() {
+      const list = document.getElementById('employee-grievance-list');
+      list.innerHTML = grievances.map(g => `
+        <div class="grievance">
+          <p><strong>Tracking Number:</strong> ${g.trackingNumber}</p>
+          <p><strong>Employee ID:</strong> ${g.employeeId}</p>
+          <p>${g.description}</p>
+          <p class="status">Current Status: ${g.status}</p>
+          <div>
+            <h4>Tracking History:</h4>
+            <ul>
+              ${g.history.map(h => `<li>${h.status} - <span class="timestamp">${h.timestamp}</span></li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
 </body>
 </html>
