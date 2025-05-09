@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Grievance Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+    }
+    .section {
+      flex: 1;
+      background: #fafafa;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+      margin-bottom: 16px;
+    }
+    textarea, input, select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 20px;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .grievance {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      background: #f9f9f9;
+    }
+    .status {
+      font-weight: bold;
+      color: #007bff;
+    }
+    .timestamp {
+      font-size: 0.9em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Employee Page -->
+    <section class="section" id="employee-section">
+      <h1>Employee Portal</h1>
+      <h2>Submit a Grievance</h2>
+      <textarea id="employee-grievance" placeholder="Describe your grievance here..."></textarea>
+      <button onclick="submitGrievance()">Submit Grievance</button>
+
+      <h2>Your Grievances</h2>
+      <div id="employee-grievance-list"></div>
+    </section>
+
+    <!-- Management Page -->
+    <section class="section" id="management-section">
+      <h1>Management Portal</h1>
+      <h2>Manage Grievances</h2>
+      <div id="management-grievance-list"></div>
+    </section>
+  </div>
+
+  <script>
+    const grievances = [];
+
+    function getCurrentTimestamp() {
+      const now = new Date();
+      return now.toLocaleString();
+    }
+
+    function submitGrievance() {
+      const description = document.getElementById('employee-grievance').value;
+      if (description.trim() === '') return alert('Grievance cannot be empty!');
+
+      const grievance = {
+        id: grievances.length + 1,
+        description,
+        status: 'Received',
+        history: [{
+          status: 'Received',
+          timestamp: getCurrentTimestamp()
+        }]
+      };
+
+      grievances.push(grievance);
+      document.getElementById('employee-grievance').value = '';
+      renderEmployeeGrievances();
+      renderManagementGrievances();
+    }
+
+    function updateGrievanceStatus(id, status) {
+      const grievance = grievances.find(g => g.id === id);
+      if (grievance) {
+        grievance.status = status;
+        grievance.history.push({
+          status,
+          timestamp: getCurrentTimestamp()
+        });
+        renderEmployeeGrievances();
+        renderManagementGrievances();
+      }
+    }
+
+    function renderEmployeeGrievances() {
+      const list = document.getElementById('employee-grievance-list');
+      list.innerHTML = grievances.length ? grievances.map(g => `
+        <div class="grievance">
+          <p>${g.description}</p>
+          <p class="status">Current Status: ${g.status}</p>
+          <div>
+            <h4>Tracking History:</h4>
+            <ul>
+              ${g.history.map(h => `<li>${h.status} - <span class="timestamp">${h.timestamp}</span></li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `).join('') : '<p>No grievances submitted yet.</p>';
+    }
+
+    function renderManagementGrievances() {
+      const list = document.getElementById('management-grievance-list');
+      list.innerHTML = grievances.length ? grievances.map(g => `
+        <div class="grievance">
+          <p>${g.description}</p>
+          <p class="status">Current Status: ${g.status}</p>
+          <div>
+            ${g.status === 'Received' ? `<button onclick="updateGrievanceStatus(${g.id}, 'Action Ongoing')">Start Action</button>` : ''}
+            ${g.status === 'Action Ongoing' ? `<button onclick="updateGrievanceStatus(${g.id}, 'Action Taken')">Mark as Resolved</button>` : ''}
+          </div>
+        </div>
+      `).join('') : '<p>No grievances available for management.</p>';
+    }
+
+    // Render initial data
+    renderEmployeeGrievances();
+    renderManagementGrievances();
+  </script>
+</body>
+</html>
