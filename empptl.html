@@ -122,6 +122,17 @@
         </div>
       `).join('');
     }
+
+    function updateGrievanceStatus(trackingNumber, status) {
+      const grievance = grievances.find(g => g.trackingNumber === trackingNumber);
+      if (grievance) {
+        grievance.status = status;
+        grievance.history.push({ status, timestamp: getCurrentTimestamp() });
+        renderEmployeeGrievances();
+      }
+    }
+
+    window.updateGrievanceStatus = updateGrievanceStatus;
   </script>
 </body>
 </html>
