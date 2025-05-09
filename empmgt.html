@@ -65,6 +65,38 @@
       font-size: 0.9em;
       color: #666;
     }
+    #management-section {
+      display: none; /* Hidden by default */
+    }
+    #password-modal {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      display: none;
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    .toggle-button {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 40px;
+      text-align: center;
+    }
+    .toggle-button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
@@ -88,8 +120,19 @@
     </section>
   </div>
 
+  <!-- Password Modal -->
+  <div id="password-modal">
+    <h2>Enter Password to Access Management Portal</h2>
+    <input type="password" id="management-password" placeholder="Enter password...">
+    <button onclick="checkPassword()">Submit</button>
+  </div>
+
+  <!-- Toggle Button -->
+  <button class="toggle-button" onclick="togglePasswordModal()">&#x25B2;</button>
+
   <script>
     const grievances = [];
+    const correctPassword = "1234"; // Set the password for the management portal
 
     function getCurrentTimestamp() {
       const now = new Date();
@@ -159,7 +202,23 @@
       `).join('') : '<p>No grievances available for management.</p>';
     }
 
-    // Render initial data
+    function checkPassword() {
+      const enteredPassword = document.getElementById('management-password').value;
+      if (enteredPassword === correctPassword) {
+        document.getElementById('management-section').style.display = 'block';
+        document.getElementById('password-modal').style.display = 'none';
+        document.querySelector('.toggle-button').style.display = 'none';
+      } else {
+        alert('Incorrect password! Please try again.');
+      }
+    }
+
+    function togglePasswordModal() {
+      const modal = document.getElementById('password-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Initial render
     renderEmployeeGrievances();
     renderManagementGrievances();
   </script>
