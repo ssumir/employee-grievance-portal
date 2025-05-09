@@ -80,6 +80,10 @@
       if (grievance) {
         grievance.status = status;
         grievance.history.push({ status, timestamp: getCurrentTimestamp() });
+
+        // Update employee portal as well
+        window.updateGrievanceStatus(grievance.trackingNumber, status);
+
         renderManagementGrievances();
       }
     }
